@@ -1,11 +1,11 @@
-package ru.infochem.cmakegradleplugin;
+package dev.infochem.cmakegradleplugin;
 
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.ProjectLayout;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import ru.infochem.cmakegradleplugin.utlis.BuildType;
+import dev.infochem.cmakegradleplugin.util.BuildType;
 
 import javax.inject.Inject;
 

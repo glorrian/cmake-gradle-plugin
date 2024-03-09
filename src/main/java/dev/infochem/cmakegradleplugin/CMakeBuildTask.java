@@ -1,4 +1,4 @@
-package ru.infochem.cmakegradleplugin;
+package dev.infochem.cmakegradleplugin;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
@@ -10,7 +10,7 @@ import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.process.ExecResult;
-import ru.infochem.cmakegradleplugin.utlis.NativePlatform;
+import dev.infochem.cmakegradleplugin.util.NativePlatform;
 
 import java.io.File;
 import java.util.ArrayList;

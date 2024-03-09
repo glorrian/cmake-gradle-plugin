@@ -1,4 +1,4 @@
-package ru.infochem.cmakegradleplugin.utlis;
+package dev.infochem.cmakegradleplugin.util;
 
 import org.gradle.api.GradleException;
 

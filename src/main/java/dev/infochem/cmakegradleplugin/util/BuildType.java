@@ -1,4 +1,4 @@
-package ru.infochem.cmakegradleplugin.utlis;
+package dev.infochem.cmakegradleplugin.util;
 
 /**
  * Build type of the CMake project build
