@@ -18,15 +18,14 @@ public class CMakePlugin implements Plugin<Project> {
     @Override
     public void apply(final Project project) {
         project.getPlugins().apply("base");
-
         CMakeExtension cmakeExtension = project.getExtensions().create("cmake", CMakeExtension.class);
 
-        if (!cmakeExtension.getPathToExecutableCmake().isPresent()) {
-            cmakeExtension.getPathToExecutableCmake().set(NativePlatform.getCMakeExecutable());
+        project.afterEvaluate(p -> {
+            if (!cmakeExtension.getPathToExecutableCmake().isPresent()) {
+            cmakeExtension.getPathToExecutableCmake().set(NativePlatform.getCMakeExecutable().getAbsolutePath());
             project.getLogger().info(
                     String.format("The CMake executable file - \"%s\" found into environment is using", NativePlatform.getCMakeExecutable()));
-        }
-        project.afterEvaluate(p -> {
+            }
             TaskContainer tasks = p.getTasks();
 
             final TaskProvider<CMakeConfigurationTask> configureCMake = tasks.register(CONFIGURE_CMAKE_TASK_NAME, CMakeConfigurationTask.class, task -> {

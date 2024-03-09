@@ -16,11 +16,9 @@ import javax.inject.Inject;
  * @version 1.0
  */
 public class CMakeExtension {
-//    private final CMakeExecutor cMakeExecutor;
-
     private final DirectoryProperty buildDirectory;
     private final DirectoryProperty sourceDirectory;
-    private final RegularFileProperty pathToExecutableCmake;
+    private final Property<String> pathToExecutableCmake;
     private final Property<String> generator;
     private final Property<String> buildType;
     private final ListProperty<String> arguments;
@@ -30,7 +28,7 @@ public class CMakeExtension {
     public CMakeExtension(ObjectFactory objectFactory, ProjectLayout projectLayout){
         buildDirectory = objectFactory.directoryProperty();
         sourceDirectory = objectFactory.directoryProperty();
-        pathToExecutableCmake = objectFactory.fileProperty();
+        pathToExecutableCmake = objectFactory.property(String.class);
         generator = objectFactory.property(String.class);
         buildType = objectFactory.property(String.class);
         arguments = objectFactory.listProperty(String.class);
@@ -39,7 +37,6 @@ public class CMakeExtension {
         buildDirectory.set(projectLayout.getBuildDirectory().dir("cmake"));
         sourceDirectory.set(projectLayout.getProjectDirectory().dir("src/main/cpp"));
         buildType.set(BuildType.DEBUG);
-
     }
 
     public DirectoryProperty getBuildDirectory() {
@@ -54,7 +51,7 @@ public class CMakeExtension {
         return toolchain;
     }
 
-    public RegularFileProperty getPathToExecutableCmake() {
+    public Property<String> getPathToExecutableCmake() {
         return pathToExecutableCmake;
     }
 
