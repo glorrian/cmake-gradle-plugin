@@ -1,4 +1,4 @@
-package ru.infochem.cmakegradleplugin;
+package dev.infochem.cmakegradleplugin;
 
 import org.gradle.api.GradleException;
 import org.slf4j.Logger;
