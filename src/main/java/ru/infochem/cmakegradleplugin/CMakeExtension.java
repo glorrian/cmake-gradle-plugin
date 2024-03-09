@@ -2,7 +2,6 @@ package ru.infochem.cmakegradleplugin;
 
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.ProjectLayout;
-import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
@@ -22,7 +21,7 @@ public class CMakeExtension {
     private final Property<String> generator;
     private final Property<String> buildType;
     private final ListProperty<String> arguments;
-    private final RegularFileProperty toolchain;
+    private final Property<String> toolchain;
 
     @Inject
     public CMakeExtension(ObjectFactory objectFactory, ProjectLayout projectLayout){
@@ -32,7 +31,7 @@ public class CMakeExtension {
         generator = objectFactory.property(String.class);
         buildType = objectFactory.property(String.class);
         arguments = objectFactory.listProperty(String.class);
-        toolchain = objectFactory.fileProperty();
+        toolchain = objectFactory.property(String.class);
 
         buildDirectory.set(projectLayout.getBuildDirectory().dir("cmake"));
         sourceDirectory.set(projectLayout.getProjectDirectory().dir("src/main/cpp"));
@@ -47,7 +46,7 @@ public class CMakeExtension {
         return sourceDirectory;
     }
 
-    public RegularFileProperty getToolchain() {
+    public Property<String> getToolchain() {
         return toolchain;
     }
 
