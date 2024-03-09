@@ -5,7 +5,7 @@ plugins {
     `java-gradle-plugin`
 }
 
-group = "ru.infochem"
+group = "dev.infochem"
 version = "1.0"
 
 repositories {
@@ -15,8 +15,8 @@ repositories {
 gradlePlugin {
     plugins {
         create("CMakeGradlePlugin") {
-            id = "ru.infochem.cmake-gradle-plugin"
-            implementationClass = "ru.infochem.cmakegradleplugin.CMakePlugin"
+            id = "dev.infochem.cmake-gradle-plugin"
+            implementationClass = "dev.infochem.cmakegradleplugin.CMakePlugin"
         }
     }
 }
@@ -24,6 +24,4 @@ gradlePlugin {
 
 dependencies {
     implementation(gradleApi())
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
 }
