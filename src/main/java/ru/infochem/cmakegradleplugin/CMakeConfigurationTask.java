@@ -1,19 +1,16 @@
 package ru.infochem.cmakegradleplugin;
 
 
-import org.gradle.api.GradleException;
-import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.file.DuplicateFileCopyingException;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.*;
 
-import org.gradle.api.model.ObjectFactory;
-import org.gradle.process.ExecResult;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +29,7 @@ public class CMakeConfigurationTask extends DefaultTask {
 
     private final ObjectFactory objectFactory = getProject().getObjects();
     private final DirectoryProperty buildDirectory = objectFactory.directoryProperty();
-    private final RegularFileProperty cmakeExecutable = objectFactory.fileProperty();
+    private final Property<String> cmakeExecutable = objectFactory.property(String.class);
     private final Property<String> buildType = objectFactory.property(String.class);
     private final DirectoryProperty sourceDirectory = objectFactory.directoryProperty();
     private final Property<String> generator = objectFactory.property(String.class);
@@ -46,7 +43,7 @@ public class CMakeConfigurationTask extends DefaultTask {
 
     private List<String> buildCommandLine() {
         List<String> cmdLine = new ArrayList<>();
-        cmdLine.add(cmakeExecutable.get().getAsFile().getAbsolutePath());
+        cmdLine.add(new File(cmakeExecutable.get()).getAbsolutePath());
 
         cmdLine.add("-DCMAKE_BUILD_TYPE=" + getBuildType().get());
 
@@ -74,11 +71,14 @@ public class CMakeConfigurationTask extends DefaultTask {
             logger.debug("The value of the sourceDirectory property: " + sourceDirectory.get());
             logger.debug("The value of the generator property: " + generator.getOrElse("Not present"));
         }
-        ExecResult result = getProject().exec(execSpec -> {
-            execSpec.setWorkingDir(buildDirectory.get().getAsFile());
-            execSpec.commandLine(buildCommandLine());
-        });
-        result.assertNormalExitValue();
+
+        CMakeExecutor cMakeExecutor = new CMakeExecutor(logger);
+        cMakeExecutor.exec(buildCommandLine(), buildDirectory.get().getAsFile());
+//        ExecResult result = getProject().exec(execSpec -> {
+//            execSpec.setWorkingDir(buildDirectory.get().getAsFile());
+//            execSpec.commandLine(buildCommandLine());
+//        });
+//        result.assertNormalExitValue();
     }
 
     @OutputDirectory
@@ -92,7 +92,7 @@ public class CMakeConfigurationTask extends DefaultTask {
     }
 
     @InputFile
-    public RegularFileProperty getCmakeExecutable() {
+    public Property<String> getCmakeExecutable() {
         return cmakeExecutable;
     }
 

@@ -2,14 +2,17 @@ package ru.infochem.cmakegradleplugin;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.Logger;
-import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.*;
 import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.Property;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.OutputDirectory;
+import org.gradle.api.tasks.TaskAction;
 import org.gradle.process.ExecResult;
 import ru.infochem.cmakegradleplugin.utlis.NativePlatform;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +33,7 @@ public class CMakeBuildTask extends DefaultTask {
 
     private final ObjectFactory objectFactory = getProject().getObjects();
     private final DirectoryProperty buildDirectory = objectFactory.directoryProperty();
-    private final RegularFileProperty cmakeExecutable = objectFactory.fileProperty();
+    private final Property<String> cmakeExecutable = objectFactory.property(String.class);
     private final Property<String> buildType = objectFactory.property(String.class);
 
     public CMakeBuildTask() {
@@ -40,7 +43,7 @@ public class CMakeBuildTask extends DefaultTask {
 
     private Object[] buildCommandLine() {
         List<String> cmdLine = new ArrayList<>();
-        cmdLine.add(cmakeExecutable.get().getAsFile().getAbsolutePath());
+        cmdLine.add(new File(cmakeExecutable.get()).getAbsolutePath());
 
         if (NativePlatform.IS_WINDOWS)
             cmdLine.add("--config " + buildType);
@@ -72,7 +75,7 @@ public class CMakeBuildTask extends DefaultTask {
     }
 
     @InputFile
-    public RegularFileProperty getCmakeExecutable() {
+    public Property<String> getCmakeExecutable() {
         return cmakeExecutable;
     }
 
