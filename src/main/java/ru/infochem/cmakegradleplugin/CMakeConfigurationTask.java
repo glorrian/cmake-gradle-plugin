@@ -3,7 +3,6 @@ package ru.infochem.cmakegradleplugin;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
@@ -34,7 +33,7 @@ public class CMakeConfigurationTask extends DefaultTask {
     private final DirectoryProperty sourceDirectory = objectFactory.directoryProperty();
     private final Property<String> generator = objectFactory.property(String.class);
     private final ListProperty<String> arguments = objectFactory.listProperty(String.class);
-    private final RegularFileProperty toolchain = objectFactory.fileProperty();
+    private final Property<String> toolchain = objectFactory.property(String.class);
 
     public CMakeConfigurationTask() {
         setGroup("cmake");
@@ -54,7 +53,7 @@ public class CMakeConfigurationTask extends DefaultTask {
         if (arguments.isPresent())
             cmdLine.addAll(arguments.get());
         if (toolchain.isPresent())
-            cmdLine.add("-DCMAKE_TOOLCHAIN_FILE=" + toolchain.get().getAsFile().getAbsolutePath());
+            cmdLine.add("-DCMAKE_TOOLCHAIN_FILE=" + toolchain.get());
 
         cmdLine.add(getSourceDirectory().get().getAsFile().getAbsolutePath());
         System.out.println(cmdLine);
@@ -109,7 +108,7 @@ public class CMakeConfigurationTask extends DefaultTask {
 
     @Optional
     @InputFile
-    public RegularFileProperty getToolchain() {
+    public Property<String> getToolchain() {
         return toolchain;
     }
 
