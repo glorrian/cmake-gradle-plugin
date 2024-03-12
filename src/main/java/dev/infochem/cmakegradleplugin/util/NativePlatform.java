@@ -10,7 +10,7 @@ import java.util.Arrays;
  *
  * @version 1.0
  */
-public class NativePlatform {
+public abstract class NativePlatform {
     public final static String OS_NAME = System.getProperty("os.name").toLowerCase();
     public final static boolean IS_LINUX = OS_NAME.contains("linux");
     public final static boolean IS_MACOS = OS_NAME.contains("mac") || OS_NAME.contains("darwin");
