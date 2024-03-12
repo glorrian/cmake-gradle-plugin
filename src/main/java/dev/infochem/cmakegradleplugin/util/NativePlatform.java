@@ -3,13 +3,14 @@ package dev.infochem.cmakegradleplugin.util;
 import org.gradle.api.GradleException;
 
 import java.io.File;
+import java.util.Arrays;
 
 /**
  * Represents a native platform for building with operating system.
  *
  * @version 1.0
  */
-public abstract class NativePlatform {
+public class NativePlatform {
     public final static String OS_NAME = System.getProperty("os.name").toLowerCase();
     public final static boolean IS_LINUX = OS_NAME.contains("linux");
     public final static boolean IS_MACOS = OS_NAME.contains("mac") || OS_NAME.contains("darwin");
@@ -26,9 +27,17 @@ public abstract class NativePlatform {
         if (cMakeExecutable != null)
             return cMakeExecutable;
 
+        final String cmakeName;
+        if (IS_WINDOWS) {
+            cmakeName = "cmake.exe";
+        } else {
+            cmakeName = "cmake";
+        }
+
         String[] PATH = System.getenv("PATH").split(File.pathSeparator);
+        System.out.println(Arrays.toString(PATH));
         for (String path : PATH) {
-            File file = new File(path, "cmake");
+            File file = new File(path, cmakeName);
             if (file.exists() && file.canExecute()) {
                 cMakeExecutable = file;
                 return cMakeExecutable;

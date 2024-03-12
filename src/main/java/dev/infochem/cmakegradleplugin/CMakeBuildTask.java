@@ -2,7 +2,6 @@ package dev.infochem.cmakegradleplugin;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.logging.Logger;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
@@ -11,6 +10,9 @@ import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.process.ExecResult;
 import dev.infochem.cmakegradleplugin.util.NativePlatform;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,8 +30,8 @@ import java.util.List;
  *
  * @version 1.0
  */
-public class CMakeBuildTask extends DefaultTask {
-    private final Logger logger = getLogger();
+public class CMakeBuildTask extends DefaultTask implements CMakeTask {
+    private final Logger logger = LoggerFactory.getLogger(CMakeBuildTask.class);
 
     private final ObjectFactory objectFactory = getProject().getObjects();
     private final DirectoryProperty buildDirectory = objectFactory.directoryProperty();
@@ -39,6 +41,11 @@ public class CMakeBuildTask extends DefaultTask {
     public CMakeBuildTask() {
         setGroup(CMakePlugin.gradleTasksGroup);
         setDescription("Build CMake project");
+
+        CMakeExtension extension = getExtension();
+        buildDirectory.set(extension.getBuildDirectory());
+        cmakeExecutable.set(extension.getCMakeExecutable());
+        buildType.set(extension.getBuildType());
     }
 
     private Object[] buildCommandLine() {
@@ -50,17 +57,16 @@ public class CMakeBuildTask extends DefaultTask {
 
         Collections.addAll(cmdLine, "--build", ".", "--clean-first");
 
+        logger.debug("Command to CMakeBuildTask is assembled - \"%s\"".formatted(String.join(" ", cmdLine)));
         return cmdLine.toArray(new Object[0]);
     }
 
     @TaskAction
-    void build() {
+    public void exec() {
         logger.info(CMakePlugin.BUILD_CMAKE_TASK_NAME + "tasks is starting execution");
-        if (logger.isDebugEnabled()) {
-            logger.debug("The value of the buildDirectory property: " + buildDirectory.get());
-            logger.debug("The value of the cmakeExecutable property: " + cmakeExecutable.get());
-            logger.debug("The value of the buildType property: " + buildType.get());
-        }
+        logger.debug("The value of the buildDirectory property: " + buildDirectory.get());
+        logger.debug("The value of the cmakeExecutable property: " + cmakeExecutable.get());
+        logger.debug("The value of the buildType property: " + buildType.get());
 
         ExecResult result = getProject().exec((task) -> {
             task.setWorkingDir(buildDirectory.get().getAsFile());

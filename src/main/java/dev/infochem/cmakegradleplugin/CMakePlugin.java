@@ -1,10 +1,15 @@
 package dev.infochem.cmakegradleplugin;
 
+import dev.infochem.cmakegradleplugin.util.BuildType;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaBasePlugin;
+import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskProvider;
 import dev.infochem.cmakegradleplugin.util.NativePlatform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -14,38 +19,38 @@ public class CMakePlugin implements Plugin<Project> {
     public static final String gradleTasksGroup = "CMake";
     public static final String CONFIGURE_CMAKE_TASK_NAME = "ConfigureCMake";
     public static final String BUILD_CMAKE_TASK_NAME = "BuildCMake";
+    public static final String DSL_EXTENSION_NAME = "cmake";
+
+    public static final String DEFAULT_BUILD_DIRECTORY_NAME = "cmake";
+    public static final String DEFAULT_SOURCE_DIRECTORY = "src/main/cpp";
+
+    private final Logger logger = LoggerFactory.getLogger(CMakePlugin.class);
 
     @Override
     public void apply(final Project project) {
-        project.getPlugins().apply("base");
-        CMakeExtension cmakeExtension = project.getExtensions().create("cmake", CMakeExtension.class);
+        project.getPlugins().apply(JavaBasePlugin.class);
+        CMakeExtension cmakeExtension = project.getExtensions().create(DSL_EXTENSION_NAME, CMakeExtension.class);
+
+        TaskContainer tasks = project.getTasks();
+
+        final TaskProvider<CMakeConfigurationTask> configureCMake = tasks.register(CONFIGURE_CMAKE_TASK_NAME, CMakeConfigurationTask.class);
+        final TaskProvider<CMakeBuildTask> buildCMake = tasks.register(BUILD_CMAKE_TASK_NAME, CMakeBuildTask.class);
+
+        tasks.named("assemble").configure(task -> task.dependsOn(buildCMake));
+        buildCMake.configure(task -> task.dependsOn(configureCMake));
 
         project.afterEvaluate(p -> {
-            if (!cmakeExtension.getPathToExecutableCmake().isPresent()) {
-            cmakeExtension.getPathToExecutableCmake().set(NativePlatform.getCMakeExecutable().getAbsolutePath());
-            project.getLogger().info(
-                    String.format("The CMake executable file - \"%s\" found into environment is using", NativePlatform.getCMakeExecutable()));
-            }
-            TaskContainer tasks = p.getTasks();
-
-            final TaskProvider<CMakeConfigurationTask> configureCMake = tasks.register(CONFIGURE_CMAKE_TASK_NAME, CMakeConfigurationTask.class, task -> {
-                task.getBuildType().set(cmakeExtension.getBuildType());
-                task.getBuildDirectory().set(cmakeExtension.getBuildDirectory());
-                task.getSourceDirectory().set(cmakeExtension.getSourceDirectory());
-                task.getCmakeExecutable().set(cmakeExtension.getPathToExecutableCmake());
-                task.getGenerator().set(cmakeExtension.getGenerator());
-                task.getToolchain().set(cmakeExtension.getToolchain());
-                task.getArguments().set(cmakeExtension.getArguments());
-            });
-
-            final TaskProvider<CMakeBuildTask> buildCMake = tasks.register(BUILD_CMAKE_TASK_NAME, CMakeBuildTask.class, task -> {
-                task.getBuildDirectory().set(cmakeExtension.getBuildDirectory());
-                task.getCmakeExecutable().set(cmakeExtension.getPathToExecutableCmake());
-                task.getBuildType().set(cmakeExtension.getBuildType());
-            });
-
-            tasks.named("assemble").configure(task -> task.dependsOn(buildCMake));
-            buildCMake.configure(task -> task.dependsOn(configureCMake));
+            setDefaultValue(cmakeExtension.getCMakeExecutable(), NativePlatform.getCMakeExecutable().getAbsolutePath());
+            setDefaultValue(cmakeExtension.getBuildDirectory(), p.getLayout().getBuildDirectory().dir(DEFAULT_BUILD_DIRECTORY_NAME).get());
+            setDefaultValue(cmakeExtension.getSourceDirectory(), p.getLayout().getProjectDirectory().dir(DEFAULT_SOURCE_DIRECTORY));
+            setDefaultValue(cmakeExtension.getBuildType(), BuildType.DEBUG);
         });
+    }
+
+    private <T extends Property<U>, U> void setDefaultValue(T property, U defaultValue) {
+        if (!property.isPresent()) {
+            logger.debug("Set default value(\"%s\") to property %s".formatted(defaultValue, property));
+            property.set(defaultValue);
+        }
     }
 }
