@@ -3,8 +3,6 @@ package dev.infochem.cmakegradleplugin.util;
 import org.gradle.api.GradleException;
 
 import java.io.File;
-import java.util.Arrays;
-
 /**
  * Represents a native platform for building with operating system.
  *
@@ -35,7 +33,6 @@ public abstract class NativePlatform {
         }
 
         String[] PATH = System.getenv("PATH").split(File.pathSeparator);
-        System.out.println(Arrays.toString(PATH));
         for (String path : PATH) {
             File file = new File(path, cmakeName);
             if (file.exists() && file.canExecute()) {
