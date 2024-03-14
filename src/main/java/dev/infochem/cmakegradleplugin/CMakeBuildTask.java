@@ -1,6 +1,5 @@
 package dev.infochem.cmakegradleplugin;
 
-import org.gradle.api.DefaultTask;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
@@ -8,7 +7,6 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.process.ExecResult;
 import dev.infochem.cmakegradleplugin.util.NativePlatform;
 
 import org.slf4j.Logger;
@@ -30,7 +28,7 @@ import java.util.List;
  *
  * @version 1.0
  */
-public class CMakeBuildTask extends DefaultTask implements CMakeTask {
+public class CMakeBuildTask extends CMakeTask {
     private final Logger logger = LoggerFactory.getLogger(CMakeBuildTask.class);
 
     private final ObjectFactory objectFactory = getProject().getObjects();
@@ -41,14 +39,10 @@ public class CMakeBuildTask extends DefaultTask implements CMakeTask {
     public CMakeBuildTask() {
         setGroup(CMakePlugin.gradleTasksGroup);
         setDescription("Build CMake project");
-
-        CMakeExtension extension = getExtension();
-        buildDirectory.set(extension.getBuildDirectory());
-        cmakeExecutable.set(extension.getCMakeExecutable());
-        buildType.set(extension.getBuildType());
+        setProperties(getExtension());
     }
 
-    private Object[] buildCommandLine() {
+    protected List<String> buildCommandLine() {
         List<String> cmdLine = new ArrayList<>();
         cmdLine.add(new File(cmakeExecutable.get()).getAbsolutePath());
 
@@ -57,22 +51,16 @@ public class CMakeBuildTask extends DefaultTask implements CMakeTask {
 
         Collections.addAll(cmdLine, "--build", ".", "--clean-first");
 
-        logger.debug("Command to CMakeBuildTask is assembled - \"%s\"".formatted(String.join(" ", cmdLine)));
-        return cmdLine.toArray(new Object[0]);
+        logger.debug("Command to CMakeBuildTask is assembled - \"{}\"", String.join(" ", cmdLine));
+        return cmdLine;
     }
 
     @TaskAction
-    public void exec() {
-        logger.info(CMakePlugin.BUILD_CMAKE_TASK_NAME + "tasks is starting execution");
-        logger.debug("The value of the buildDirectory property: " + buildDirectory.get());
-        logger.debug("The value of the cmakeExecutable property: " + cmakeExecutable.get());
-        logger.debug("The value of the buildType property: " + buildType.get());
-
-        ExecResult result = getProject().exec((task) -> {
-            task.setWorkingDir(buildDirectory.get().getAsFile());
-            task.commandLine(buildCommandLine());
-        });
-        result.assertNormalExitValue();
+    public void execute() {
+        logger.info("{} tasks is starting execution", CMakePlugin.BUILD_CMAKE_TASK_NAME);
+        logProviders();
+        CMakeExecutor executor = new CMakeExecutor(CMakeBuildTask.class);
+        executor.execute(buildCommandLine(), buildDirectory.get().getAsFile());
     }
 
     @OutputDirectory
@@ -81,7 +69,7 @@ public class CMakeBuildTask extends DefaultTask implements CMakeTask {
     }
 
     @InputFile
-    public Property<String> getCmakeExecutable() {
+    public Property<String> getCMakeExecutable() {
         return cmakeExecutable;
     }
 

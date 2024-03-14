@@ -38,18 +38,18 @@ public class CMakePlugin implements Plugin<Project> {
 
         tasks.named("assemble").configure(task -> task.dependsOn(buildCMake));
         buildCMake.configure(task -> task.dependsOn(configureCMake));
-
         project.afterEvaluate(p -> {
             setDefaultValue(cmakeExtension.getCMakeExecutable(), NativePlatform.getCMakeExecutable().getAbsolutePath());
-            setDefaultValue(cmakeExtension.getBuildDirectory(), p.getLayout().getBuildDirectory().dir(DEFAULT_BUILD_DIRECTORY_NAME).get());
-            setDefaultValue(cmakeExtension.getSourceDirectory(), p.getLayout().getProjectDirectory().dir(DEFAULT_SOURCE_DIRECTORY));
+            setDefaultValue(cmakeExtension.getBuildDirectory(), project.getLayout().getBuildDirectory().dir(DEFAULT_BUILD_DIRECTORY_NAME).get());
+            setDefaultValue(cmakeExtension.getSourceDirectory(), project.getLayout().getProjectDirectory().dir(DEFAULT_SOURCE_DIRECTORY));
             setDefaultValue(cmakeExtension.getBuildType(), BuildType.DEBUG);
         });
+
     }
 
     private <T extends Property<U>, U> void setDefaultValue(T property, U defaultValue) {
         if (!property.isPresent()) {
-            logger.debug("Set default value(\"%s\") to property %s".formatted(defaultValue, property));
+            logger.debug("Set default value(\"{}\") to property {}", defaultValue, property);
             property.set(defaultValue);
         }
     }

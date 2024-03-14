@@ -9,6 +9,7 @@ import org.gradle.api.provider.Property;
  *
  * @version 1.0
  */
+@SuppressWarnings("unused")
 public abstract class CMakeExtension {
     abstract public DirectoryProperty getBuildDirectory();
 
@@ -23,4 +24,5 @@ public abstract class CMakeExtension {
     abstract public Property<String> getBuildType();
 
     abstract public ListProperty<String> getArguments();
+
 }
