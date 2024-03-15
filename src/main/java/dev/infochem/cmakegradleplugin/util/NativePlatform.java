@@ -21,17 +21,20 @@ public abstract class NativePlatform {
             throw new GradleException("Unsupported operation system: " + OS_NAME);
     }
 
+    /**
+     * A method for searching for the CMake executable file in system variables.
+     * If the file is found once in the following method calls, it will be taken from the buffer and will not be searched again
+     * @return The CMake executable file
+     */
     public static File getCMakeExecutable() {
         if (cMakeExecutable != null)
             return cMakeExecutable;
-
         final String cmakeName;
         if (IS_WINDOWS) {
             cmakeName = "cmake.exe";
         } else {
             cmakeName = "cmake";
         }
-
         String[] PATH = System.getenv("PATH").split(File.pathSeparator);
         for (String path : PATH) {
             File file = new File(path, cmakeName);

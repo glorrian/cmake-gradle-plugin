@@ -5,7 +5,6 @@ package dev.infochem.cmakegradleplugin.util;
  *
  * @version 1.0
  */
-
 @SuppressWarnings("unused")
 public interface BuildType {
     String DEBUG = "Debug";

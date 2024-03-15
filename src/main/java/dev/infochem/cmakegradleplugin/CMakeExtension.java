@@ -5,7 +5,8 @@ import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 
 /**
- * Extension model for Gradle plugin to build CMake into Gradle
+ * <p>Extension model for Gradle plugin to build CMake into Gradle</p>
+ * <p>An abstract class cannot be used outside of Gradle. Gradle creates fields and getter implementations automatically</p>
  *
  * @version 1.0
  */

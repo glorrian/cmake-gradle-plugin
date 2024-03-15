@@ -14,12 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Gradle task for CMake configure stage
- *
- * <ul>
- *     <li>Gradle group: CMake</li>
- *     <li>Gradle description: Build CMake project</li>
- * </ul>
+ * Gradle task for CMake configure stage.
+ * Cannot be used outside Gradle.
  *
  * @version 1.0
  */
@@ -40,7 +36,7 @@ public class CMakeConfigurationTask extends CMakeTask {
         setDescription("Configure a Build with CMake");
         setProperties(getExtension());
     }
-
+    @Override
     protected List<String> buildCommandLine() {
         List<String> cmdLine = new ArrayList<>();
         cmdLine.add(new File(cmakeExecutable.get()).getAbsolutePath());
@@ -64,7 +60,7 @@ public class CMakeConfigurationTask extends CMakeTask {
     @TaskAction
     public void execute(){
         logger.info("{} tasks is starting execution", CMakePlugin.CONFIGURE_CMAKE_TASK_NAME);
-        logProviders();
+        logProviders(logger::debug);
         CMakeExecutor cMakeExecutor = new CMakeExecutor(getClass());
         cMakeExecutor.execute(buildCommandLine(), buildDirectory.get().getAsFile());
     }

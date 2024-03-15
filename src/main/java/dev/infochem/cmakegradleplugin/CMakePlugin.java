@@ -47,6 +47,16 @@ public class CMakePlugin implements Plugin<Project> {
 
     }
 
+    /**
+     * Some arguments in DSL extension can be predicted based on practices that are often used when building projects,
+     * default values for such arguments can be specified through this method.
+     * If the argument does not already contain a value, it will be assigned a default value.
+     *
+     * @param property An argument from DSL extension
+     * @param defaultValue The default value to argument
+     * @param <T> Property type
+     * @param <U> The type of value that Property contains
+     */
     private <T extends Property<U>, U> void setDefaultValue(T property, U defaultValue) {
         if (!property.isPresent()) {
             logger.debug("Set default value(\"{}\") to property {}", defaultValue, property);
