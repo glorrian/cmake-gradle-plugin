@@ -21,6 +21,10 @@ gradlePlugin {
     }
 }
 
+tasks.withType<Javadoc> {
+    (options as StandardJavadocDocletOptions).tags("implNote")
+}
+
 
 dependencies {
     implementation(gradleApi())
