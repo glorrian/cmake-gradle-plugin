@@ -58,7 +58,7 @@ public class CMakeBuildTask extends CMakeTask {
     @TaskAction
     public void execute() {
         logger.info("{} tasks is starting execution", CMakePlugin.BUILD_CMAKE_TASK_NAME);
-        logProviders();
+        logProviders(logger::debug);
         CMakeExecutor executor = new CMakeExecutor(CMakeBuildTask.class);
         executor.execute(buildCommandLine(), buildDirectory.get().getAsFile());
     }
