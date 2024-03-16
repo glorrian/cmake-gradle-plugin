@@ -5,11 +5,13 @@ import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,22 @@ public class CMakeConfigurationTask extends CMakeTask {
         setGroup("cmake");
         setDescription("Configure a Build with CMake");
         setProperties(getExtension());
+        setListProperties(getExtension());
     }
+
+    /**
+     * Method to set value of arguments. It's needs because ListProperty is not an inheritor of {@link Property} class
+     * @param extension DSL extension with data
+     */
+    private void setListProperties(CMakeExtension extension) {
+        try {
+            Method setterMethod = ListProperty.class.getMethod("value", Provider.class);
+            setTypedFields(extension, ListProperty.class, setterMethod);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     protected List<String> buildCommandLine() {
         List<String> cmdLine = new ArrayList<>();
@@ -49,6 +66,7 @@ public class CMakeConfigurationTask extends CMakeTask {
         }
         if (arguments.isPresent())
             cmdLine.addAll(arguments.get());
+
         if (toolchain.isPresent())
             cmdLine.add("-DCMAKE_TOOLCHAIN_FILE=" + toolchain.get());
 
