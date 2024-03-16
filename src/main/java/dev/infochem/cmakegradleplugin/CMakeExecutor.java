@@ -26,7 +26,7 @@ public class CMakeExecutor {
      * @param _execClass {@link java.lang.Class} label for logger messages
      */
     public CMakeExecutor(Class<?> _execClass) {
-        PREFIX = "[%s EXECUTOR] ".formatted(_execClass);
+        PREFIX = "[%s EXECUTOR] ".formatted(_execClass.getSimpleName());
     }
 
     /**
@@ -41,7 +41,7 @@ public class CMakeExecutor {
 
         ProcessBuilder processBuilder = new ProcessBuilder(cmdLine);
         logger.debug("{}Setup ProcessBuilder", PREFIX);
-        logger.debug("{}Setup ProcessBuilder with \"{}\" command", PREFIX, cmdLine);
+        logger.warn("{}Setup ProcessBuilder with \"{}\" command", PREFIX, cmdLine);
         processBuilder.directory(workingDir);
         logger.debug("{}Setup directory(\"{}\") to ProcessBuilder", PREFIX, workingDir.getAbsolutePath());
 

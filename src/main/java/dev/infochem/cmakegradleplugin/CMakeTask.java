@@ -81,22 +81,39 @@ public abstract class CMakeTask extends DefaultTask {
     }
 
     /**
+     * A method for set value to the field of task object from DSL extension
+     *
+     * @param cMakeExtension DSL extension with data in the fields
+     * @param type Type of fields that will be handled by this method
+     * @param setterMethod Method for set value of the parsed fields
+     * @param <T> Parametrized type of {@link Class} from type param
+     */
+    protected final <T> void setTypedFields(CMakeExtension cMakeExtension, Class<T> type, Method setterMethod) {
+        for (Method method : getTypedGetters(type)) {
+            try {
+                T field = type.cast(method.invoke(this));
+                Object getterValue = cMakeExtension.getClass().getMethod(method.getName()).invoke(cMakeExtension);
+                if (type.isInstance(getterValue)) {
+                    T fieldValue = type.cast(getterValue);
+                    setterMethod.invoke(field, fieldValue);
+                }
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new GradleException(e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
      * A method that parses all properties from the task
      * and automatically sets them values from the DSL extension
      * @param extension DSL extension from the build configuration
      */
     protected final void setProperties(CMakeExtension extension) {
-        for (Method method : getTypedGetters(Property.class)) {
-            try {
-                Property<?> property = (Property<?>) method.invoke(this);
-                Object getterValue = extension.getClass().getMethod(method.getName()).invoke(extension);
-                if (getterValue instanceof Property<?> valueProperty) {
-                    Method setMethod = Property.class.getDeclaredMethod("set", Object.class);
-                    setMethod.invoke(property, valueProperty.getOrNull());
-                }
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException e) {
-                throw new GradleException(e.getMessage(), e);
-            }
+        try {
+            Method setterMethod = Property.class.getMethod("set", Provider.class);
+            setTypedFields(extension, Property.class, setterMethod);
+        } catch (NoSuchMethodException e) {
+            throw new GradleException(e.getMessage(), e);
         }
     }
 
