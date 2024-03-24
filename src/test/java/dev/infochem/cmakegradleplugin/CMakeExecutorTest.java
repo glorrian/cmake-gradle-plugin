@@ -1,5 +1,6 @@
 package dev.infochem.cmakegradleplugin;
 
+import dev.infochem.cmakegradleplugin.util.NativePlatform;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -10,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CMakeExecutorTest {
     private final CMakeExecutor cMakeExecutor = new CMakeExecutor(CMakeExecutorTest.class);
     private final String ECHO_STRING = "CMakeExecutorTestTest";
+    private final String CURRENT_PATH = System.getProperty("user.dir");
+    private final File CURRENT_DIR = new File(CURRENT_PATH);
     private void assertEcho(String executeResult) {
         assertEquals(ECHO_STRING, executeResult);
     }
@@ -20,6 +23,28 @@ public class CMakeExecutorTest {
     @Test
     void testExecuting() {
         List<String> cmdLine = List.of("echo", ECHO_STRING);
-        cMakeExecutor.execute(cmdLine, new File(System.getProperty("user.dir")), this::assertEcho, this::assertError);
+        cMakeExecutor.execute(cmdLine, CURRENT_DIR, this::assertEcho, this::assertError);
+    }
+
+    private void assertDirectory(String executeResult) {
+        assertEquals(CURRENT_PATH, executeResult);
+    }
+    @Test
+    void directoryTest() {
+        List<String> cmdLine;
+        if (NativePlatform.IS_WINDOWS) {
+            cmdLine = List.of("echo", "%cd%");
+        } else {
+            cmdLine = List.of("pwd");
+        }
+        cMakeExecutor.execute(cmdLine, CURRENT_DIR, this::assertDirectory, this::assertError);
+    }
+
+    private void voidAssert(String executeResult) {
+    }
+    @Test
+    void cmakeTest() {
+        List<String> cmdLine = List.of(NativePlatform.getCMakeExecutable().getAbsolutePath(), "--help");
+        cMakeExecutor.execute(cmdLine, CURRENT_DIR, this::voidAssert, this::assertError);
     }
 }
