@@ -22,12 +22,8 @@ public class CMakeExecutorTest {
 
     @Test
     void testExecuting() {
-        List<String> cmdLine;
-        if (NativePlatform.IS_WINDOWS) {
-            cmdLine = List.of("powershell.exe", "echo",  ECHO_STRING);
-        } else {
-            cmdLine = List.of("echo",  ECHO_STRING);
-        }
+        List<String> cmdLine = NativePlatform.IS_WINDOWS ? List.of("powershell.exe", "echo",  ECHO_STRING)
+                : List.of("echo",  ECHO_STRING);
         cMakeExecutor.execute(cmdLine, CURRENT_DIR, this::assertEcho, this::assertError);
     }
 
@@ -36,12 +32,8 @@ public class CMakeExecutorTest {
     }
     @Test
     void directoryTest() {
-        List<String> cmdLine;
-        if (NativePlatform.IS_WINDOWS) {
-            cmdLine = List.of("powershell.exe", "pwd");
-        } else {
-            cmdLine = List.of("pwd");
-        }
+        List<String> cmdLine = NativePlatform.IS_WINDOWS ? List.of("powershell.exe", "pwd")
+                : List.of("pwd");
         cMakeExecutor.execute(cmdLine, CURRENT_DIR, this::assertDirectory, this::assertError);
     }
 
