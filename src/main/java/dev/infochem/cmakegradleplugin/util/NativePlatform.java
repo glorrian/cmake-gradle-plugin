@@ -29,12 +29,7 @@ public abstract class NativePlatform {
     public static File getCMakeExecutable() {
         if (cMakeExecutable != null)
             return cMakeExecutable;
-        final String cmakeName;
-        if (IS_WINDOWS) {
-            cmakeName = "cmake.exe";
-        } else {
-            cmakeName = "cmake";
-        }
+        final String cmakeName = IS_WINDOWS ? "cmake.exe" : "cmake";
         String[] PATH = System.getenv("PATH").split(File.pathSeparator);
         for (String path : PATH) {
             File file = new File(path, cmakeName);
