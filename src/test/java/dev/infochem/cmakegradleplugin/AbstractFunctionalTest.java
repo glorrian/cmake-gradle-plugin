@@ -2,7 +2,6 @@ package dev.infochem.cmakegradleplugin;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
