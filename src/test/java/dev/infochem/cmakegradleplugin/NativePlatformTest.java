@@ -1,5 +1,6 @@
-package dev.infochem.cmakegradleplugin.util;
+package dev.infochem.cmakegradleplugin;
 
+import dev.infochem.cmakegradleplugin.util.NativePlatform;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
