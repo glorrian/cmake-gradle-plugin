@@ -59,7 +59,7 @@ public class CMakeExecutor {
             logger.info(PREFIX + "Starting Process - {}", process);
             ExecutorService executorService = Executors.newFixedThreadPool(2);
             printStream(executorService, new StreamPrintService(process.getInputStream(), inputPrintAction));
-            printStream(executorService, new StreamPrintService(process.getInputStream(), errorPrintAction));
+            printStream(executorService, new StreamPrintService(process.getErrorStream(), errorPrintAction));
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new GradleException(PREFIX + "Command execution failed with an error(return code %d)".formatted(exitCode));
