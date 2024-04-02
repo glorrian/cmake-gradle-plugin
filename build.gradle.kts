@@ -25,9 +25,8 @@ tasks.withType<Javadoc> {
     (options as StandardJavadocDocletOptions).tags("implNote")
 }
 
-
 dependencies {
-    implementation(gradleApi())
+    runtimeOnly(gradleApi())
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

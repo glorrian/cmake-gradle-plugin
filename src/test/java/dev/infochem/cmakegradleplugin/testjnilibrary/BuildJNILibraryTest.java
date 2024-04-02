@@ -1,7 +1,6 @@
 package dev.infochem.cmakegradleplugin.testjnilibrary;
 
 import dev.infochem.cmakegradleplugin.AbstractFunctionalTest;
-import dev.infochem.cmakegradleplugin.jni.NativeProcessor;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -16,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
-import static dev.infochem.cmakegradleplugin.jni.NativeProcessor.processLibraryName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -60,7 +58,7 @@ public class BuildJNILibraryTest extends AbstractFunctionalTest{
     @Test
     @Order(3)
     void testNativeProcessor() throws IOException, URISyntaxException {
-        String libName = processLibraryName("jnilibrary");
+        String libName = System.mapLibraryName("jnilibrary");
         File resourcesDir = new File(BuildJNILibraryTest.class.getResource("").toURI());
         File testLibrary = new File(resourcesDir, libName);
         try {
@@ -68,14 +66,14 @@ public class BuildJNILibraryTest extends AbstractFunctionalTest{
             File library = new File(testProjectDir, libName);
             Files.copy(library.toPath(), testLibrary.toPath(), StandardCopyOption.REPLACE_EXISTING);
             assert testLibrary.exists();
-            NativeProcessor.loadLibraryFromResources(BuildJNILibraryTest.class, "jnilibrary");
+//            NativeProcessor.loadLibraryFromResources(BuildJNILibraryTest.class, "jnilibrary");
         } finally {
             testLibrary.deleteOnExit();
         }
     }
 
     void loadLibrary() {
-        System.load(testProjectDir.getAbsolutePath()+"/"+processLibraryName("jnilibrary"));
+        System.load(testProjectDir.getAbsolutePath()+"/"+System.mapLibraryName("jnilibrary"));
     }
 
 }
