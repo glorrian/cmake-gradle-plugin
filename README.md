@@ -7,6 +7,3 @@ Executor should handle Input stream and Error Stream with
 org.gradle.api.logging.Logger using
 - Add a little of JNI supports. It should support downloading of jni.h form OpenJDK GitHub
 - \[Probably] Add cross-platform building of CMake. 
-
-
-# Алина тумпица
