@@ -2,6 +2,7 @@ package dev.infochem.cmakegradleplugin.testexecutable;
 
 import dev.infochem.cmakegradleplugin.AbstractFunctionalTest;
 import dev.infochem.cmakegradleplugin.CMakeExecutor;
+import dev.infochem.cmakegradleplugin.util.BuildType;
 import dev.infochem.cmakegradleplugin.util.NativePlatform;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
@@ -20,7 +21,7 @@ public class BuildExecutableTest extends AbstractFunctionalTest {
 
         String settingsBuildContent = "rootProject.name = \"hello-world'\"\n" +
                 "includeBuild(\"" +  rootDir.getAbsolutePath() + "\")";
-        writeBuildFile(settingsFile, settingsBuildContent);
+        writeBuildFile(settingsFile, escapeSlashes(settingsBuildContent));
         String buildContent = "plugins {\n" +
                 "id(\"dev.infochem.cmake-gradle-plugin\")\n" +
                 "}\n" +
@@ -29,10 +30,10 @@ public class BuildExecutableTest extends AbstractFunctionalTest {
                 "srcDir.set(File(\"" + cMakeProjectDir.getAbsolutePath() + "\"))\n" +
                 "sourceDirectory = srcDir\n" +
                 "val buildDir = project.objects.directoryProperty()\n" +
-                "buildDir.set(File(\"" + testProjectDir.getAbsolutePath() + "\"))\n" +
+                "buildDir.set(File(\"" + buildDir.getAbsolutePath() + "\"))\n" +
                 "buildDirectory = buildDir\n" +
                 "}";
-        writeBuildFile(buildFile, buildContent);
+        writeBuildFile(buildFile, escapeSlashes(buildContent));
 
         BuildResult result = GradleRunner.create()
                 .withProjectDir(testProjectDir)
@@ -43,12 +44,20 @@ public class BuildExecutableTest extends AbstractFunctionalTest {
 
         String executableBinName = NativePlatform.IS_WINDOWS ? "test_executable.exe" : "test_executable";
         String executableBinPath = "bin/" + executableBinName;
+        String winExecutableBinPath = "bin/" + BuildType.DEBUG + "/" + executableBinName;
 
         CMakeExecutor executor = new CMakeExecutor(BuildExecutableTest.class);
-        executor.execute(List.of(executableBinPath), testProjectDir, this::assertOutput, this::assertError);
+        if (new File(buildDir, executableBinName).exists()) {
+            executor.execute(List.of(executableBinPath), buildDir, this::assertOutput, this::assertError);
+        } else if (new File(buildDir, winExecutableBinPath).exists()) {
+            executor.execute(List.of("powershell.exe", winExecutableBinPath), buildDir, this::assertOutput, this::assertError);
+        } else {
+            assert false;
+        }
     }
 
     void assertOutput(String output) {
+        System.out.println(output);
         assertEquals("TEST EXECUTABLE", output);
     }
 }
