@@ -38,7 +38,9 @@ public class CMakePlugin implements Plugin<Project> {
         project.afterEvaluate(p -> {
             setDefaultValue(cmakeExtension.getCMakeExecutable(), NativePlatform.getCMakeExecutable().getAbsolutePath());
             setDefaultValue(cmakeExtension.getBuildDirectory(), project.getLayout().getBuildDirectory().dir(DEFAULT_BUILD_DIRECTORY_NAME).get());
-            setDefaultValue(cmakeExtension.getSourceDirectory(), project.getLayout().getProjectDirectory().dir(DEFAULT_SOURCE_DIRECTORY));
+            if (project.getLayout().getProjectDirectory().dir(DEFAULT_SOURCE_DIRECTORY).getAsFile().exists()) {
+                setDefaultValue(cmakeExtension.getSourceDirectory(), project.getLayout().getProjectDirectory().dir(DEFAULT_SOURCE_DIRECTORY));
+            }
             setDefaultValue(cmakeExtension.getBuildType(), BuildType.DEBUG);
         });
 
