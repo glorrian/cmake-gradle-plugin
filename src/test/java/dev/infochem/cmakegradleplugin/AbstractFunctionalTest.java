@@ -16,6 +16,7 @@ public abstract class AbstractFunctionalTest {
     protected static File testProjectDir;
     protected static File settingsFile;
     protected static File buildFile;
+    protected static File buildDir;
 
     @BeforeAll
     public static void setup() throws IOException {
@@ -23,6 +24,8 @@ public abstract class AbstractFunctionalTest {
         assert settingsFile.createNewFile();
         buildFile = new File(testProjectDir, "build.gradle.kts");
         assert buildFile.createNewFile();
+        buildDir = new File(testProjectDir, "buildDir");
+        assert buildDir.mkdir();
     }
 
     protected void writeBuildFile(File buildFile, String content) throws IOException {
@@ -32,11 +35,15 @@ public abstract class AbstractFunctionalTest {
     }
 
     protected void assertError(String error) {
-        assert false;
+        assert !error.isEmpty();
     }
 
     protected void assertCMakeResult(BuildResult result) {
         assertEquals(SUCCESS, result.task(":ConfigureCMake").getOutcome());
         assertEquals(SUCCESS, result.task(":BuildCMake").getOutcome());
+    }
+
+    protected String escapeSlashes(String path) {
+        return path.replace("\\", "\\\\");
     }
 }

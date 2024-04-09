@@ -46,12 +46,14 @@ public class CMakeBuildTask extends CMakeTask {
         List<String> cmdLine = new ArrayList<>();
         cmdLine.add(new File(cmakeExecutable.get()).getAbsolutePath());
 
-        if (NativePlatform.IS_WINDOWS)
-            cmdLine.add("--config " + buildType);
+        Collections.addAll(cmdLine, "--build", ".");
 
-        Collections.addAll(cmdLine, "--build", ".", "--clean-first");
+        if (NativePlatform.IS_WINDOWS) {
+            Collections.addAll(cmdLine, "--config", buildType.get());
+        }
 
         logger.debug("Command to CMakeBuildTask is assembled - \"{}\"", String.join(" ", cmdLine));
+        System.out.println(cmdLine);
         return cmdLine;
     }
 

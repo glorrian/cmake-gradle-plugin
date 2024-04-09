@@ -1,6 +1,8 @@
 package dev.infochem.cmakegradleplugin.testjnilibrary;
 
 import dev.infochem.cmakegradleplugin.AbstractFunctionalTest;
+import dev.infochem.cmakegradleplugin.util.BuildType;
+import dev.infochem.cmakegradleplugin.util.NativePlatform;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -10,10 +12,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,7 +24,8 @@ public class BuildJNILibraryTest extends AbstractFunctionalTest{
 
         String settingsBuildContent = "rootProject.name = \"jni-project'\"\n" +
                 "includeBuild(\"" +  rootDir.getAbsolutePath() + "\")";
-        writeBuildFile(settingsFile, settingsBuildContent);
+
+        writeBuildFile(settingsFile, escapeSlashes(settingsBuildContent));
         String buildContent = "plugins {\n" +
                 "id(\"dev.infochem.cmake-gradle-plugin\")\n" +
                 "}\n" +
@@ -35,10 +34,10 @@ public class BuildJNILibraryTest extends AbstractFunctionalTest{
                 "srcDir.set(File(\"" + cMakeProjectDir.getAbsolutePath() + "\"))\n" +
                 "sourceDirectory = srcDir\n" +
                 "val buildDir = project.objects.directoryProperty()\n" +
-                "buildDir.set(File(\"" + testProjectDir.getAbsolutePath() + "\"))\n" +
+                "buildDir.set(File(\"" + buildDir.getAbsolutePath() + "\"))\n" +
                 "buildDirectory = buildDir\n" +
                 "}";
-        writeBuildFile(buildFile, buildContent);
+        writeBuildFile(buildFile, escapeSlashes(buildContent));
 
         BuildResult result = GradleRunner.create()
                 .withProjectDir(testProjectDir)
@@ -55,25 +54,15 @@ public class BuildJNILibraryTest extends AbstractFunctionalTest{
         assertEquals(100*2, JNILinker.doubleInt(100));
     }
 
-    @Test
-    @Order(3)
-    void testNativeProcessor() throws IOException, URISyntaxException {
-        String libName = System.mapLibraryName("jnilibrary");
-        File resourcesDir = new File(BuildJNILibraryTest.class.getResource("").toURI());
-        File testLibrary = new File(resourcesDir, libName);
-        try {
-            assert Arrays.asList(testProjectDir.list()).contains(libName);
-            File library = new File(testProjectDir, libName);
-            Files.copy(library.toPath(), testLibrary.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            assert testLibrary.exists();
-//            NativeProcessor.loadLibraryFromResources(BuildJNILibraryTest.class, "jnilibrary");
-        } finally {
-            testLibrary.deleteOnExit();
-        }
-    }
-
     void loadLibrary() {
-        System.load(testProjectDir.getAbsolutePath()+"/"+System.mapLibraryName("jnilibrary"));
+        String libName = System.mapLibraryName("jnilibrary");
+        String libPath;
+        if (NativePlatform.IS_WINDOWS) {
+            libPath = buildDir.getAbsolutePath() + "\\" + BuildType.DEBUG + "\\" + libName;
+        } else {
+            libPath = buildDir.getAbsolutePath() + "/" + libName;
+        }
+        System.load(libPath);
     }
 
 }

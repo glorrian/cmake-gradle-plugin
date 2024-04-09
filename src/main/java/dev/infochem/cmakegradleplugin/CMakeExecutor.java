@@ -1,10 +1,12 @@
 package dev.infochem.cmakegradleplugin;
 
+import dev.infochem.cmakegradleplugin.util.NativePlatform;
 import org.gradle.api.GradleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
@@ -47,10 +49,11 @@ public class CMakeExecutor {
      * @param inputPrintAction Function for printing the output of the execution
      * @param errorPrintAction Function for printing output of execution errors
      */
-    public void execute(final List<String> cmdLine, final File workingDir,
+    public void execute(List<String> cmdLine, final File workingDir,
                         Consumer<? super String> inputPrintAction, Consumer<? super String> errorPrintAction) {
         if (!workingDir.exists() || !workingDir.isDirectory())
             throw new IllegalArgumentException(PREFIX + "The provided working directory is not a valid directory.");
+        cmdLine = validateArgs(cmdLine);
         ProcessBuilder processBuilder = new ProcessBuilder(cmdLine);
         processBuilder.directory(workingDir);
         logger.debug(PREFIX + "Setup ProcessBuilder with \"{}\" command in {} directory", cmdLine, workingDir.getAbsolutePath());
@@ -67,6 +70,20 @@ public class CMakeExecutor {
         } catch (IOException | InterruptedException e) {
             throw new GradleException(PREFIX + "An exception occurred during the execution of the command", e);
         }
+    }
+
+    private List<String> validateArgs(List<String> cmdLine) {
+        // Must create new List object 'cause given list can be immutable and doesn't support set operation
+        List<String> validatedList = new ArrayList<>(cmdLine.size());
+        for (String arg : cmdLine) {
+            if (arg.contains(" ")) {
+                arg = "\"" + arg + "\"";
+            } else if (NativePlatform.IS_WINDOWS && arg.contains("/")) {
+                arg = arg.replace("/", "\\");
+            }
+            validatedList.add(arg);
+        }
+        return validatedList;
     }
 
     private void printStream(ExecutorService executorService, StreamPrintService printService) {
