@@ -19,7 +19,7 @@ public class CMakePlugin implements Plugin<Project> {
     public static final String DSL_EXTENSION_NAME = "cmake";
 
     public static final String DEFAULT_BUILD_DIRECTORY_NAME = "cmake";
-    public static final String DEFAULT_SOURCE_DIRECTORY = "src/main/cpp";
+    public static final String DEFAULT_SOURCE_DIRECTORY = "src/main/cxx";
 
     private final Logger logger = LoggerFactory.getLogger(CMakePlugin.class);
 
