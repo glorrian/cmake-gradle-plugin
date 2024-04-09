@@ -1,9 +1,9 @@
-package dev.infochem.cmakegradleplugin.testexecutable;
+package dev.glorrian.cmakegradleplugin.testexecutable;
 
-import dev.infochem.cmakegradleplugin.AbstractFunctionalTest;
-import dev.infochem.cmakegradleplugin.CMakeExecutor;
-import dev.infochem.cmakegradleplugin.util.BuildType;
-import dev.infochem.cmakegradleplugin.util.NativePlatform;
+import dev.glorrian.cmakegradleplugin.AbstractFunctionalTest;
+import dev.glorrian.cmakegradleplugin.CMakeExecutor;
+import dev.glorrian.cmakegradleplugin.util.BuildType;
+import dev.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ public class BuildExecutableTest extends AbstractFunctionalTest {
                 "includeBuild(\"" +  rootDir.getAbsolutePath() + "\")";
         writeBuildFile(settingsFile, escapeSlashes(settingsBuildContent));
         String buildContent = "plugins {\n" +
-                "id(\"dev.infochem.cmake-gradle-plugin\")\n" +
+                "id(\"dev.glorrian.cmake-gradle-plugin\")\n" +
                 "}\n" +
                 "cmake {\n" +
                 "val srcDir = project.objects.directoryProperty()\n" +
@@ -47,12 +47,12 @@ public class BuildExecutableTest extends AbstractFunctionalTest {
         String winExecutableBinPath = "bin/" + BuildType.DEBUG + "/" + executableBinName;
 
         CMakeExecutor executor = new CMakeExecutor(BuildExecutableTest.class);
-        if (new File(buildDir, executableBinName).exists()) {
+        if (new File(buildDir, executableBinPath).exists()) {
             executor.execute(List.of(executableBinPath), buildDir, this::assertOutput, this::assertError);
         } else if (new File(buildDir, winExecutableBinPath).exists()) {
             executor.execute(List.of("powershell.exe", winExecutableBinPath), buildDir, this::assertOutput, this::assertError);
         } else {
-            assert false;
+            throw new FileNotFoundException("The executable file was not found after the build.");
         }
     }
 

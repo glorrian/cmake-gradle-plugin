@@ -1,6 +1,6 @@
-package dev.infochem.cmakegradleplugin;
+package dev.glorrian.cmakegradleplugin;
 
-import dev.infochem.cmakegradleplugin.util.NativePlatform;
+import dev.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.gradle.api.GradleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
