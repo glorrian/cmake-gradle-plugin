@@ -5,7 +5,7 @@ plugins {
     `java-gradle-plugin`
 }
 
-group = "dev.infochem"
+group = "dev.glorrian"
 version = "1.0"
 
 repositories {
@@ -15,8 +15,8 @@ repositories {
 gradlePlugin {
     plugins {
         create("CMakeGradlePlugin") {
-            id = "dev.infochem.cmake-gradle-plugin"
-            implementationClass = "dev.infochem.cmakegradleplugin.CMakePlugin"
+            id = "dev.glorrian.cmake-gradle-plugin"
+            implementationClass = "dev.glorrian.cmakegradleplugin.CMakePlugin"
         }
     }
 }

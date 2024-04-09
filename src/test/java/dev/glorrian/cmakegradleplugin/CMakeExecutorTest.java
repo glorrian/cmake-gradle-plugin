@@ -1,6 +1,6 @@
-package dev.infochem.cmakegradleplugin;
+package dev.glorrian.cmakegradleplugin;
 
-import dev.infochem.cmakegradleplugin.util.NativePlatform;
+import dev.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

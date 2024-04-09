@@ -1,4 +1,4 @@
-package dev.infochem.cmakegradleplugin;
+package dev.glorrian.cmakegradleplugin;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.junit.jupiter.api.BeforeAll;

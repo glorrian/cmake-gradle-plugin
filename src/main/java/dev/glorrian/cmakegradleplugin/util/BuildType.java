@@ -1,4 +1,4 @@
-package dev.infochem.cmakegradleplugin.util;
+package dev.glorrian.cmakegradleplugin.util;
 
 /**
  * Build type of the CMake project build

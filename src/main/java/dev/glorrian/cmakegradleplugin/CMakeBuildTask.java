@@ -1,5 +1,6 @@
-package dev.infochem.cmakegradleplugin;
+package dev.glorrian.cmakegradleplugin;
 
+import dev.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
@@ -7,7 +8,6 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
-import dev.infochem.cmakegradleplugin.util.NativePlatform;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +20,6 @@ import java.util.List;
 
 /**
  * Task for the cmake project build stage from the cache
- *
- * <ul>
- *     <li>Gradle group: CMake</li>
- *     <li>Gradle description: Build CMake project</li>
- * </ul>
  *
  * @version 1.0
  */

@@ -1,4 +1,4 @@
-package dev.infochem.cmakegradleplugin.util;
+package dev.glorrian.cmakegradleplugin.util;
 
 import org.gradle.api.GradleException;
 

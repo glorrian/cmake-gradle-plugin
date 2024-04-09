@@ -1,8 +1,8 @@
-package dev.infochem.cmakegradleplugin.testjnilibrary;
+package dev.glorrian.cmakegradleplugin.testjnilibrary;
 
-import dev.infochem.cmakegradleplugin.AbstractFunctionalTest;
-import dev.infochem.cmakegradleplugin.util.BuildType;
-import dev.infochem.cmakegradleplugin.util.NativePlatform;
+import dev.glorrian.cmakegradleplugin.AbstractFunctionalTest;
+import dev.glorrian.cmakegradleplugin.util.BuildType;
+import dev.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -27,7 +27,7 @@ public class BuildJNILibraryTest extends AbstractFunctionalTest{
 
         writeBuildFile(settingsFile, escapeSlashes(settingsBuildContent));
         String buildContent = "plugins {\n" +
-                "id(\"dev.infochem.cmake-gradle-plugin\")\n" +
+                "id(\"dev.glorrian.cmake-gradle-plugin\")\n" +
                 "}\n" +
                 "cmake {\n" +
                 "val srcDir = project.objects.directoryProperty()\n" +

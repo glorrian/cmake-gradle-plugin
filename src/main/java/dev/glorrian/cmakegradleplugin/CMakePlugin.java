@@ -1,20 +1,17 @@
-package dev.infochem.cmakegradleplugin;
+package dev.glorrian.cmakegradleplugin;
 
-import dev.infochem.cmakegradleplugin.util.BuildType;
+import dev.glorrian.cmakegradleplugin.util.BuildType;
+import dev.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskProvider;
-import dev.infochem.cmakegradleplugin.util.NativePlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/**
- * 
- */
 public class CMakePlugin implements Plugin<Project> {
     public static final String gradleTasksGroup = "CMake";
     public static final String CONFIGURE_CMAKE_TASK_NAME = "ConfigureCMake";
