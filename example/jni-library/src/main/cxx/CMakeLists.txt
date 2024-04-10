@@ -15,8 +15,7 @@ elseif(CMAKE_HOST_UNIX)
 endif()
 set(JAVA_INCLUDE_PATH "${JAVA_HOME}/include")
 
-
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_PATH})
 add_library(jnilibrary SHARED jni_library.cpp)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "/")
 
 target_include_directories(jnilibrary PUBLIC ${JAVA_INCLUDE_PATH} ${JAVA_INCLUDE_PATH2})
