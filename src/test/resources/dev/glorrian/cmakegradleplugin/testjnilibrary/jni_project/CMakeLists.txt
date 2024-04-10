@@ -18,7 +18,5 @@ set(JAVA_INCLUDE_PATH "${JAVA_HOME}/include")
 
 add_library(jnilibrary SHARED jni_library.cpp)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "/")
-message(${JAVA_INCLUDE_PATH})
-message(${JAVA_INCLUDE_PATH2})
 
 target_include_directories(jnilibrary PUBLIC ${JAVA_INCLUDE_PATH} ${JAVA_INCLUDE_PATH2})
