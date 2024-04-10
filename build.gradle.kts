@@ -13,10 +13,14 @@ repositories {
 }
 
 gradlePlugin {
+    vcsUrl = "https://github.com/GloRRian55/cmake-gradle-plugin"
     plugins {
         create("CMakeGradlePlugin") {
             id = "dev.glorrian.cmake-gradle-plugin"
             implementationClass = "dev.glorrian.cmakegradleplugin.CMakePlugin"
+            displayName = "CMake Gradle Plugin"
+            description = "Gradle plugin for comfortable CMake build system using inside gradle builds"
+            tags.set(listOf("cmake", "jni", "c++", "c", "native", "plugin"))
         }
     }
 }
