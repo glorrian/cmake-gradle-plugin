@@ -48,7 +48,6 @@ public class CMakeBuildTask extends CMakeTask {
         }
 
         logger.debug("Command to CMakeBuildTask is assembled - \"{}\"", String.join(" ", cmdLine));
-        System.out.println(cmdLine);
         return cmdLine;
     }
 
