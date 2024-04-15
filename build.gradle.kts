@@ -18,7 +18,7 @@ gradlePlugin {
     plugins {
         create("CMakeGradlePlugin") {
             id = "io.github.glorrian.cmake-gradle-plugin"
-            implementationClass = "dev.glorrian.cmakegradleplugin.CMakePlugin"
+            implementationClass = "io.github.glorrian.cmakegradleplugin.CMakePlugin"
             displayName = "CMake Gradle Plugin"
             description = "Gradle plugin for comfortable CMake build system using inside gradle builds"
             tags.set(listOf("cmake", "jni", "c++", "c", "native"))

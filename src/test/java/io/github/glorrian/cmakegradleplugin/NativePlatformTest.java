@@ -1,6 +1,6 @@
-package dev.glorrian.cmakegradleplugin;
+package io.github.glorrian.cmakegradleplugin;
 
-import dev.glorrian.cmakegradleplugin.util.NativePlatform;
+import io.github.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

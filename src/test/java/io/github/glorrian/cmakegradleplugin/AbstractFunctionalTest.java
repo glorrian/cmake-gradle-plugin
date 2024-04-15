@@ -1,4 +1,4 @@
-package dev.glorrian.cmakegradleplugin;
+package io.github.glorrian.cmakegradleplugin;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.junit.jupiter.api.BeforeAll;

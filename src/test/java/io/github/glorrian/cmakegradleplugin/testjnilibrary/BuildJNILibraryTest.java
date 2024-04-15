@@ -1,8 +1,8 @@
-package dev.glorrian.cmakegradleplugin.testjnilibrary;
+package io.github.glorrian.cmakegradleplugin.testjnilibrary;
 
-import dev.glorrian.cmakegradleplugin.AbstractFunctionalTest;
-import dev.glorrian.cmakegradleplugin.util.BuildType;
-import dev.glorrian.cmakegradleplugin.util.NativePlatform;
+import io.github.glorrian.cmakegradleplugin.AbstractFunctionalTest;
+import io.github.glorrian.cmakegradleplugin.util.BuildType;
+import io.github.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
