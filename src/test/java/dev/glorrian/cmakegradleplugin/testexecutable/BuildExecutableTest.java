@@ -23,7 +23,7 @@ public class BuildExecutableTest extends AbstractFunctionalTest {
                 "includeBuild(\"" +  rootDir.getAbsolutePath() + "\")";
         writeBuildFile(settingsFile, escapeSlashes(settingsBuildContent));
         String buildContent = "plugins {\n" +
-                "id(\"dev.glorrian.cmake-gradle-plugin\")\n" +
+                "id(\"io.github.glorrian.cmake-gradle-plugin\")\n" +
                 "}\n" +
                 "cmake {\n" +
                 "val srcDir = project.objects.directoryProperty()\n" +
