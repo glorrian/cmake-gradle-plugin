@@ -5,7 +5,7 @@ plugins {
     `java-gradle-plugin`
 }
 
-group = "dev.glorrian"
+group = "io.github.glorrian"
 version = "1.0"
 
 repositories {
