@@ -1,5 +1,5 @@
 plugins{
-    id("dev.glorrian.cmake-gradle-plugin")
+    id("io.github.glorrian.cmake-gradle-plugin")
 }
 
 cmake {}

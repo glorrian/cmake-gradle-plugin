@@ -7,11 +7,11 @@ To use it, you need to apply the plugin in your build script:
 
 Groovy:
 ```groovy
-apply plugin: 'dev.glorrian.cmake-gradle-plugin'
+apply plugin: 'io.github.glorrian.cmake-gradle-plugin'
 ```
 Kotlin:
 ```kotlin
-apply(plugin = "dev.glorrian.cmake-gradle-plugin")
+apply(plugin = "io.github.glorrian.cmake-gradle-plugin")
 ```
 
 Then write the configuration of your Cmake project in the gradle build file:
