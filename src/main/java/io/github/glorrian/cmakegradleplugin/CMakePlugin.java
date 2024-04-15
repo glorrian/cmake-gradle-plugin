@@ -1,7 +1,7 @@
-package dev.glorrian.cmakegradleplugin;
+package io.github.glorrian.cmakegradleplugin;
 
-import dev.glorrian.cmakegradleplugin.util.BuildType;
-import dev.glorrian.cmakegradleplugin.util.NativePlatform;
+import io.github.glorrian.cmakegradleplugin.util.BuildType;
+import io.github.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaBasePlugin;

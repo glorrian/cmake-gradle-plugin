@@ -1,4 +1,4 @@
-package dev.glorrian.cmakegradleplugin.util;
+package io.github.glorrian.cmakegradleplugin.util;
 
 /**
  * Build type of the CMake project build

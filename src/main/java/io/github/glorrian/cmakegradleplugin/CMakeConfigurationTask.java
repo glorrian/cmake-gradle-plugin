@@ -1,4 +1,4 @@
-package dev.glorrian.cmakegradleplugin;
+package io.github.glorrian.cmakegradleplugin;
 
 import org.gradle.api.file.DirectoryProperty;
 

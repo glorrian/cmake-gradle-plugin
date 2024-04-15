@@ -1,4 +1,4 @@
-package dev.glorrian.cmakegradleplugin.util;
+package io.github.glorrian.cmakegradleplugin.util;
 
 import org.gradle.api.GradleException;
 

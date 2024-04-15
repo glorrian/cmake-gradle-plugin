@@ -1,9 +1,9 @@
-package dev.glorrian.cmakegradleplugin.testexecutable;
+package io.github.glorrian.cmakegradleplugin.testexecutable;
 
-import dev.glorrian.cmakegradleplugin.AbstractFunctionalTest;
-import dev.glorrian.cmakegradleplugin.CMakeExecutor;
-import dev.glorrian.cmakegradleplugin.util.BuildType;
-import dev.glorrian.cmakegradleplugin.util.NativePlatform;
+import io.github.glorrian.cmakegradleplugin.AbstractFunctionalTest;
+import io.github.glorrian.cmakegradleplugin.CMakeExecutor;
+import io.github.glorrian.cmakegradleplugin.util.BuildType;
+import io.github.glorrian.cmakegradleplugin.util.NativePlatform;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Test;
