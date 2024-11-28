@@ -56,10 +56,11 @@ public class CMakeExecutor {
         cmdLine = validateArgs(cmdLine);
         ProcessBuilder processBuilder = new ProcessBuilder(cmdLine);
         processBuilder.directory(workingDir);
-        logger.debug(PREFIX + "Setup ProcessBuilder with \"{}\" command in {} directory", cmdLine, workingDir.getAbsolutePath());
+        logger.debug("{}Setup ProcessBuilder with \"{}\" command in {} directory", PREFIX, cmdLine,
+                     workingDir.getAbsolutePath());
         try {
             Process process = processBuilder.start();
-            logger.info(PREFIX + "Starting Process - {}", process);
+            logger.info("{}Starting Process - {}", PREFIX, process);
             ExecutorService executorService = Executors.newFixedThreadPool(2);
             printStream(executorService, new StreamPrintService(process.getInputStream(), inputPrintAction));
             printStream(executorService, new StreamPrintService(process.getErrorStream(), errorPrintAction));
@@ -93,9 +94,9 @@ public class CMakeExecutor {
 
     private void throwIfTimeOut(Future<?> future) {
         try {
-            future.get(3, TimeUnit.SECONDS);
-        } catch (ExecutionException | InterruptedException | TimeoutException e) {
-            logger.warn(PREFIX + "Timed out waiting for input stream to be closed.");
+            future.get();
+        } catch (ExecutionException | InterruptedException e) {
+            logger.warn("{}An exception occurred during the execution of the command", PREFIX, e);
         }
     }
 
